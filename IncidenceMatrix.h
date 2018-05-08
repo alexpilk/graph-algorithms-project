@@ -15,7 +15,6 @@ private:
     vector<vector<int>> matrix;
     vector<int> weights;
     bool directed;
-    unsigned int size;
 
     vector<int> createEdge(int v1, int v2);
 

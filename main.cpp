@@ -12,9 +12,13 @@ void test_graph(Graph *graph) {
 }
 
 int main() {
-    Graph matrix_graph = IncidenceMatrix(3, true);
-    Graph list_graph = AdjacencyList(3, true);
-    test_graph(&matrix_graph);
+    //auto matrix_graph = IncidenceMatrix(3, true);
+    auto list_graph = AdjacencyList(3, true);
+    //test_graph(&matrix_graph);
     test_graph(&list_graph);
+    vector<int> distances = list_graph.dijkstraShortestPath(0);
+    for(int distance : distances){
+        cout << distance << endl;
+    }
     return 0;
 }
