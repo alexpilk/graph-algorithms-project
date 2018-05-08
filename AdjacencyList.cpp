@@ -4,6 +4,7 @@
 
 #include "AdjacencyList.h"
 #include <iostream>
+
 using namespace std;
 
 
@@ -19,7 +20,7 @@ void AdjacencyList::addEdge(int v1, int v2, int weight) {
 }
 
 void AdjacencyList::print() {
-    for (int vertex = 0; vertex < list.size(); vertex++){
+    for (int vertex = 0; vertex < list.size(); vertex++) {
         cout << vertex;
         for (auto edge : list[vertex])
             cout << " -> " << edge.neighbor << " (weight " << edge.weight << ")";

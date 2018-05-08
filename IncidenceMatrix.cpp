@@ -4,6 +4,7 @@
 
 #include "IncidenceMatrix.h"
 #include <iostream>
+
 using namespace std;
 
 
@@ -13,17 +14,22 @@ IncidenceMatrix::IncidenceMatrix(unsigned int size, bool directed) {
 }
 
 void IncidenceMatrix::addEdge(int v1, int v2, int weight) {
+    auto edge = createEdge(v1, v2);
+    matrix.emplace_back(edge);
+    weights.emplace_back(weight);
+}
+
+vector<int> IncidenceMatrix::createEdge(int v1, int v2) {
     vector<int> edge;
     edge.resize(size);
     fill(edge.begin(), edge.end(), 0);
-    if(v1 == v2)
+    if (v1 == v2)
         edge[v1] = 2;
     else {
         edge[v1] = 1;
         edge[v2] = directed ? -1 : 1;
     }
-    matrix.emplace_back(edge);
-    weights.emplace_back(weight);
+    return edge;
 }
 
 void IncidenceMatrix::print() {
@@ -37,5 +43,6 @@ void IncidenceMatrix::print() {
     cout << "Weights:" << endl;
     for (int weight : weights)
         cout << weight << " ";
+    cout << endl;
 }
 
