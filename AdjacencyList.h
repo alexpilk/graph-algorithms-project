@@ -13,16 +13,6 @@ using namespace std;
 class AdjacencyList : public Graph {
 private:
 
-    struct DijkstraVertex {
-        int vertex;
-        int cost;
-
-        DijkstraVertex(int vertex, int cost) {
-            this->vertex = vertex;
-            this->cost = cost;
-        }
-    };
-
     bool directed;
     vector<vector<Edge>> list;
 public:
@@ -32,9 +22,7 @@ public:
 
     vector<Edge> getEdges(int vertex) override;
 
-    vector<int> dijkstraShortestPath(int start_vertex);
-
-    int getMinVertex(vector<int> distances, vector<bool> completed);
+    vector<int> dijkstraShortestPath(int start_vertex) override;
 
     void print() override;
 };

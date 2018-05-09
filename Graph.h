@@ -25,6 +25,7 @@ public:
 
     virtual void addEdge(int v1, int v2, int weight) = 0;
     virtual vector<Edge> getEdges(int vertex) = 0;
+    virtual vector<int> dijkstraShortestPath(int start_vertex) = 0;
     virtual void print() = 0;
     unsigned int getSize() {
         return size;

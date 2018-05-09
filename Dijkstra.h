@@ -24,6 +24,7 @@ public:
     explicit Dijkstra(Graph* graph);
 
     vector<int> findShortestPaths(int start_vertex);
+
 };
 
 

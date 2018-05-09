@@ -4,6 +4,8 @@
 
 #include "IncidenceMatrix.h"
 #include <iostream>
+#include <algorithm>
+#include "Dijkstra.h"
 
 using namespace std;
 
@@ -44,5 +46,34 @@ void IncidenceMatrix::print() {
     for (int weight : weights)
         cout << weight << " ";
     cout << endl;
+}
+
+vector<Graph::Edge> IncidenceMatrix::getEdges(int vertex) {
+    vector<Edge> edges;
+    int neighbor;
+    for (int edge_index = 0; edge_index < matrix.size(); edge_index++) {
+        vector<int> row = matrix[edge_index];
+        if (row[vertex] == 1){
+            int neighbor_mark;
+            if(directed)
+                neighbor_mark = -1;
+            else
+                neighbor_mark = 1;
+            row[vertex] = 0;
+            neighbor = distance(row.begin(), find(row.begin(), row.end(), neighbor_mark));
+        } else if (row[vertex] == 2){
+            neighbor = vertex;
+        } else {
+            continue;
+        }
+        Edge edge = Edge(neighbor, weights[edge_index]);
+        edges.emplace_back(edge);
+    }
+    return edges;
+}
+
+vector<int> IncidenceMatrix::dijkstraShortestPath(int start_vertex) {
+    auto *pathFinder = new Dijkstra(this);
+    return pathFinder->findShortestPaths(start_vertex);
 }
 

@@ -10,13 +10,13 @@ void test_graph(Graph *graph) {
     graph->addEdge(1, 0, 90);
     graph->print();
 }
-
+// 0 11 2
 int main() {
-    //auto matrix_graph = IncidenceMatrix(3, true);
-    auto list_graph = AdjacencyList(3, true);
-    //test_graph(&matrix_graph);
+    auto matrix_graph = IncidenceMatrix(3, false);
+    auto list_graph = AdjacencyList(3, false);
+    test_graph(&matrix_graph);
     test_graph(&list_graph);
-    vector<int> distances = list_graph.dijkstraShortestPath(0);
+    vector<int> distances = matrix_graph.dijkstraShortestPath(0);
     for(int distance : distances){
         cout << distance << endl;
     }
