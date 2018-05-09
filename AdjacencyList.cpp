@@ -4,6 +4,7 @@
 
 #include "AdjacencyList.h"
 #include <iostream>
+#include <algorithm>
 #include "Dijkstra.h"
 
 using namespace std;
@@ -16,9 +17,9 @@ AdjacencyList::AdjacencyList(unsigned int size, bool directed) {
 }
 
 void AdjacencyList::addEdge(int v1, int v2, int weight) {
-    list[v1].emplace_back(Edge(v2, weight));
+    list[v1].emplace_back(Edge(v1, v2, weight));
     if (!directed && v1 != v2)
-        list[v2].emplace_back(Edge(v1, weight));
+        list[v2].emplace_back(Edge(v2, v1, weight));
 }
 
 void AdjacencyList::print() {
@@ -35,6 +36,16 @@ vector<int> AdjacencyList::dijkstraShortestPath(int start_vertex) {
     return pathFinder->findShortestPaths(start_vertex);
 }
 
-vector<Graph::Edge> AdjacencyList::getEdges(int vertex) {
+vector<Graph::Edge> AdjacencyList::getAdjacentEdges(int vertex) {
     return list[vertex];
+}
+
+vector<Graph::Edge> AdjacencyList::getAllEdges() {
+    vector<Edge> all_edges;
+    for (vector<Edge> edges : list)
+        all_edges.insert(all_edges.end(), edges.begin(), edges.end());
+    sort(all_edges.begin(), all_edges.end());
+    if (!directed)
+        all_edges.erase(unique(all_edges.begin(), all_edges.end()), all_edges.end());
+    return all_edges;
 }

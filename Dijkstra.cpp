@@ -34,7 +34,7 @@ vector<int> Dijkstra::findShortestPaths(int start_vertex) {
         if (distances[current_vertex] == INF)
             break;
         completed[current_vertex] = true;
-        for (Graph::Edge edge : graph->getEdges(current_vertex)) {
+        for (Graph::Edge edge : graph->getAdjacentEdges(current_vertex)) {
             int current_cost = distances[current_vertex] + edge.weight;
             if (current_cost < distances[edge.neighbor] || distances[edge.neighbor] == INF)
                 distances[edge.neighbor] = current_cost;

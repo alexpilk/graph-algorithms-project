@@ -23,7 +23,9 @@ public:
 
     void addEdge(int v1, int v2, int weight) override;
 
-    vector<Edge> getEdges(int vertex) override;
+    vector<Edge> getAdjacentEdges(int vertex) override;
+
+    vector<Edge> getAllEdges() override;
 
     vector<int> dijkstraShortestPath(int start_vertex) override;
 

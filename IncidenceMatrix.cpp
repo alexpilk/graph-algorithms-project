@@ -48,25 +48,25 @@ void IncidenceMatrix::print() {
     cout << endl;
 }
 
-vector<Graph::Edge> IncidenceMatrix::getEdges(int vertex) {
+vector<Graph::Edge> IncidenceMatrix::getAdjacentEdges(int vertex) {
     vector<Edge> edges;
     int neighbor;
     for (int edge_index = 0; edge_index < matrix.size(); edge_index++) {
         vector<int> row = matrix[edge_index];
-        if (row[vertex] == 1){
+        if (row[vertex] == 1) {
             int neighbor_mark;
-            if(directed)
+            if (directed)
                 neighbor_mark = -1;
             else
                 neighbor_mark = 1;
             row[vertex] = 0;
             neighbor = distance(row.begin(), find(row.begin(), row.end(), neighbor_mark));
-        } else if (row[vertex] == 2){
+        } else if (row[vertex] == 2) {
             neighbor = vertex;
         } else {
             continue;
         }
-        Edge edge = Edge(neighbor, weights[edge_index]);
+        Edge edge = Edge(vertex, neighbor, weights[edge_index]);
         edges.emplace_back(edge);
     }
     return edges;
@@ -75,5 +75,33 @@ vector<Graph::Edge> IncidenceMatrix::getEdges(int vertex) {
 vector<int> IncidenceMatrix::dijkstraShortestPath(int start_vertex) {
     auto *pathFinder = new Dijkstra(this);
     return pathFinder->findShortestPaths(start_vertex);
+}
+
+vector<Graph::Edge> IncidenceMatrix::getAllEdges() {
+    vector<Edge> all_edges;
+    for (int edge_index = 0; edge_index < matrix.size(); edge_index++) {
+        vector<int> row = matrix[edge_index];
+        int neighbor;
+        Edge edge;
+        for (int vertex = 0; vertex < row.size(); vertex++) {
+            if (row[vertex] == 0) {
+                continue;
+            } else if (abs(row[vertex]) == 1) {
+                int neighbor_mark;
+                if (directed)
+                    neighbor_mark = row[vertex] * -1;
+                else
+                    neighbor_mark = 1;
+                neighbor = distance(row.begin(), find(row.begin() + vertex + 1, row.end(), neighbor_mark));
+            } else if (row[vertex] == 2) {
+                neighbor = vertex;
+            }
+            edge = Edge(vertex, neighbor, weights[edge_index]);
+            break;
+        }
+        all_edges.emplace_back(edge);
+    }
+    sort(all_edges.begin(), all_edges.end());
+    return all_edges;
 }
 
