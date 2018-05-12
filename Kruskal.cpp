@@ -5,7 +5,7 @@
 #include "Kruskal.h"
 
 
-vector<Graph::Edge> Kruskal::getMST(Graph* graph) {
+vector<Graph::Edge> Kruskal::getMST() {
     vector<Graph::Edge> mst;
     vector<Graph::Edge> edges = graph->getAllEdges();
     for (Graph::Edge edge : edges) {

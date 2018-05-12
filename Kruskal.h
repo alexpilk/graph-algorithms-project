@@ -12,8 +12,14 @@
 using namespace std;
 
 class Kruskal {
+private:
+    Graph *graph;
 public:
-    vector<Graph::Edge> getMST(Graph* graph);
+    explicit Kruskal(Graph *graph) {
+        this->graph = graph;
+    }
+
+    vector<Graph::Edge> getMST();
 };
 
 

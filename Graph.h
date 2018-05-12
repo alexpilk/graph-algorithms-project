@@ -55,8 +55,6 @@ public:
 
     virtual vector<Edge> getAllEdges() = 0;
 
-    virtual vector<int> dijkstraShortestPath(int start_vertex) = 0;
-
     virtual void print() = 0;
 
     unsigned int getSize() {

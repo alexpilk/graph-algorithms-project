@@ -5,7 +5,6 @@
 #include "IncidenceMatrix.h"
 #include "utils.h"
 #include <algorithm>
-#include "Dijkstra.h"
 
 using namespace std;
 
@@ -72,17 +71,11 @@ vector<Graph::Edge> IncidenceMatrix::getAdjacentEdges(int vertex) {
     return edges;
 }
 
-vector<int> IncidenceMatrix::dijkstraShortestPath(int start_vertex) {
-    auto *pathFinder = new Dijkstra(this);
-    return pathFinder->findShortestPaths(start_vertex);
-}
-
 vector<Graph::Edge> IncidenceMatrix::getAllEdges() {
     vector<Edge> all_edges;
     for (int edge_index = 0; edge_index < matrix.size(); edge_index++) {
         vector<int> row = matrix[edge_index];
         int neighbor;
-        Edge edge;
         for (int vertex = 0; vertex < row.size(); vertex++) {
             if (row[vertex] == 0) {
                 continue;
@@ -96,10 +89,10 @@ vector<Graph::Edge> IncidenceMatrix::getAllEdges() {
             } else if (row[vertex] == 2) {
                 neighbor = vertex;
             }
-            edge = Edge(vertex, neighbor, weights[edge_index]);
+            Edge edge = Edge(vertex, neighbor, weights[edge_index]);
+            all_edges.emplace_back(edge);
             break;
         }
-        all_edges.emplace_back(edge);
     }
     sort(all_edges.begin(), all_edges.end());
     return all_edges;

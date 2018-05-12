@@ -4,7 +4,6 @@
 
 #include "AdjacencyList.h"
 #include <algorithm>
-#include "Dijkstra.h"
 
 using namespace std;
 
@@ -28,11 +27,6 @@ void AdjacencyList::print() {
             cout << " -> " << edge.neighbor << " (weight " << edge.weight << ")";
         cout << endl;
     }
-}
-
-vector<int> AdjacencyList::dijkstraShortestPath(int start_vertex) {
-    auto* pathFinder = new Dijkstra(this);
-    return pathFinder->findShortestPaths(start_vertex);
 }
 
 vector<Graph::Edge> AdjacencyList::getAdjacentEdges(int vertex) {

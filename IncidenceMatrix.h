@@ -31,8 +31,6 @@ public:
 
     vector<Edge> getAllEdges() override;
 
-    vector<int> dijkstraShortestPath(int start_vertex) override;
-
     void print() override;
 };
 
