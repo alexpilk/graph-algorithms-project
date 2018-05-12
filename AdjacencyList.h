@@ -16,7 +16,9 @@ private:
 public:
     explicit AdjacencyList(unsigned int size, bool directed);
 
-    void fillWithRandomEdges(float density) override;
+    void deleteRandomEdge() override;
+
+    void deleteEdge(int vertex, int edge_index);
 
     void addEdge(int v1, int v2, int weight) override;
 

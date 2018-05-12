@@ -21,7 +21,7 @@ public:
         int neighbor;
         int weight;
 
-        Edge() {}
+        Edge() = default;
 
         Edge(int vertex, int neighbor, int weight) {
             this->vertex = vertex;
@@ -43,21 +43,13 @@ public:
         }
     };
 
-    virtual void fillWithRandomEdges(float density) = 0;
+    void fillWithRandomEdges();
 
-    void fillWithRandomEdges() {
-        int min_weight = 1;
-        int max_weight = 100;
-        for (int v1 = 0; v1 < size; v1++) {
-            for (int v2 = v1 + 1; v2 < size; v2++) {
-                addEdge(v1, v2, randint(min_weight, max_weight));
-                if (directed)
-                    addEdge(v2, v1, randint(min_weight, max_weight));
-            }
-        }
-    }
+    void fillWithRandomEdges(float density);
 
     virtual void addEdge(int v1, int v2, int weight) = 0;
+
+    virtual void deleteRandomEdge() = 0;
 
     virtual vector<Edge> getAdjacentEdges(int vertex) = 0;
 

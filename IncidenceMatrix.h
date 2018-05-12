@@ -21,9 +21,11 @@ private:
 public:
     explicit IncidenceMatrix(unsigned int size, bool directed);
 
-    void fillWithRandomEdges(float density) override;
-
     void addEdge(int v1, int v2, int weight) override;
+
+    void deleteRandomEdge() override;
+
+    void deleteEdge(int edge_index);
 
     vector<Edge> getAdjacentEdges(int vertex) override;
 
