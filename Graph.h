@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <vector>
+#include "utils.h"
 
 using namespace std;
 
@@ -20,7 +21,7 @@ public:
         int neighbor;
         int weight;
 
-        Edge(){}
+        Edge() {}
 
         Edge(int vertex, int neighbor, int weight) {
             this->vertex = vertex;
@@ -28,19 +29,33 @@ public:
             this->weight = weight;
         }
 
-        bool operator < (const Edge& edge) const {
+        bool operator<(const Edge &edge) const {
             return (weight < edge.weight);
         }
 
-        bool operator == (const Edge& edge) const {
+        bool operator==(const Edge &edge) const {
             return (vertex == edge.vertex && neighbor == edge.neighbor) ||
                    (vertex == edge.neighbor && neighbor == edge.vertex);
         }
 
-        void print(){
+        void print() {
             cout << vertex << " - " << neighbor << " (weight " << weight << ")" << endl;
         }
     };
+
+    virtual void fillWithRandomEdges(float density) = 0;
+
+    void fillWithRandomEdges() {
+        int min_weight = 1;
+        int max_weight = 100;
+        for (int v1 = 0; v1 < size; v1++) {
+            for (int v2 = v1 + 1; v2 < size; v2++) {
+                addEdge(v1, v2, randint(min_weight, max_weight));
+                if (directed)
+                    addEdge(v2, v1, randint(min_weight, max_weight));
+            }
+        }
+    }
 
     virtual void addEdge(int v1, int v2, int weight) = 0;
 
@@ -54,10 +69,6 @@ public:
 
     unsigned int getSize() {
         return size;
-    }
-
-    bool isDirected() {
-        return directed;
     }
 };
 

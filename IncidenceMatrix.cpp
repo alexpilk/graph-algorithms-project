@@ -3,7 +3,7 @@
 //
 
 #include "IncidenceMatrix.h"
-#include <iostream>
+#include "utils.h"
 #include <algorithm>
 #include "Dijkstra.h"
 
@@ -105,3 +105,17 @@ vector<Graph::Edge> IncidenceMatrix::getAllEdges() {
     return all_edges;
 }
 
+void IncidenceMatrix::fillWithRandomEdges(float density) {
+    Graph::fillWithRandomEdges();
+
+    int max_edges = size * (size - 1);
+    max_edges = directed ? max_edges : max_edges / 2;
+    auto number_of_edges = (int) (density * max_edges);
+    int edges_to_delete = max_edges - number_of_edges;
+
+    for (int i = 0; i < edges_to_delete; i++) {
+        int edge_index = randint(0, matrix.size());
+        matrix.erase(matrix.begin() + edge_index);
+        weights.erase(weights.begin() + edge_index);
+    }
+}

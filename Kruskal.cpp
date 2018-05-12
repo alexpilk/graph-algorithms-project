@@ -3,7 +3,6 @@
 //
 
 #include "Kruskal.h"
-#include "Graph.h"
 
 
 vector<Graph::Edge> Kruskal::getMST(Graph* graph) {
