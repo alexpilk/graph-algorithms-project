@@ -18,7 +18,7 @@ public:
     explicit Kruskal(Graph *graph) {
         this->graph = graph;
     }
-
+    bool findCycle(int vertex, int neighbor, vector<Graph::Edge> mst, bool visited[]);
     vector<Graph::Edge> getMST();
 };
 

@@ -21,8 +21,8 @@ void test_graph(Graph *graph) {
 }
 
 int main() {
-    auto matrix_graph = IncidenceMatrix(4, true);
-    auto list_graph = AdjacencyList(4, true);
+    auto matrix_graph = IncidenceMatrix(5, false);
+    auto list_graph = AdjacencyList(5, false);
     test_graph(&matrix_graph);
     test_graph(&list_graph);
     return 0;

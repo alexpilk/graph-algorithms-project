@@ -58,7 +58,7 @@ void AdjacencyList::deleteEdge(int vertex, int edge_index) {
     if (!directed)
         list[neighbor].erase(
                 remove_if(list[neighbor].begin(), list[neighbor].end(), [&](Edge const & edge) {
-                    return edge.neighbor == neighbor;
+                    return edge.neighbor == vertex;
                 }), list[neighbor].end());
 }
 
