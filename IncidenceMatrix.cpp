@@ -3,7 +3,6 @@
 //
 
 #include "IncidenceMatrix.h"
-#include "utils.h"
 #include <algorithm>
 
 using namespace std;

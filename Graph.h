@@ -45,7 +45,7 @@ public:
 
     void fillWithRandomEdges();
 
-    void fillWithRandomEdges(float density);
+    void fillWithRandomEdges(double density);
 
     virtual void addEdge(int v1, int v2, int weight) = 0;
 

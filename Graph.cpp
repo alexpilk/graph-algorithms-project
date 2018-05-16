@@ -15,7 +15,7 @@ void Graph::fillWithRandomEdges() {
     }
 }
 
-void Graph::fillWithRandomEdges(float density) {
+void Graph::fillWithRandomEdges(double density) {
     fillWithRandomEdges();
 
     int max_edges = size * (size - 1);
