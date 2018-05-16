@@ -52,7 +52,7 @@ using namespace std;
 //    kruskal = Kruskal(&list_graph);
 //    *output << measure(kruskal, kruskal.getMST);
 //}
-vector<Graph::Edge> parse_file(const string path){
+vector<Graph::Edge> parse_file(const string path) {
     vector<Graph::Edge> edges;
     ifstream infile(path);
     string first_line;
@@ -60,7 +60,7 @@ vector<Graph::Edge> parse_file(const string path){
     getline(infile, first_line);
     string line;
     int v1, v2, weight;
-    while (getline(infile, line)){
+    while (getline(infile, line)) {
 
         istringstream iss(line); // Turn the string into a stream.
         string tmp;
@@ -75,136 +75,159 @@ vector<Graph::Edge> parse_file(const string path){
     }
     return edges;
 }
+
 void menu() {
     int start_option;
-    AdjacencyList *list_graph;
-    IncidenceMatrix *matrix_graph;
+    AdjacencyList *list_graph = NULL;
+    IncidenceMatrix *matrix_graph = NULL;
     do {
-        cout << "1 - Load graph from file\n"
-                "2 - Generate random graph\n"
-                "0 - Exit:" << endl;
+        cout << "=========================\n"
+                "1 - MST\n"
+                "2 - Shortest path\n"
+                "0 - Exit\n"
+                "=========================" << endl;
         cin >> start_option;
         if (start_option == 0)
             break;
-        else {
-            vector<Graph::Edge> edges = parse_file("example_graph.txt");
-            list_graph = new AdjacencyList(edges.size(), false);
-            matrix_graph = new IncidenceMatrix(edges.size(), false);
-            for (Graph::Edge edge : edges){
-                list_graph->addEdge(edge.vertex, edge.neighbor, edge.weight);
-                matrix_graph->addEdge(edge.vertex, edge.neighbor, edge.weight);
-            }
-            list_graph->print();
-            matrix_graph->print();
+        else if (start_option == 1) {
+            do {
+                cout << "=========================\n"
+                        "1 - Load graph from file\n"
+                        "2 - Generate random graph\n"
+                        "3 - Display graph\n"
+                        "4 - Run Kruskal on Incidence Matrix\n"
+                        "5 - Run Kruskal on Adjacency List\n"
+                        "0 - Exit\n"
+                        "=========================" << endl;
+                cin >> start_option;
+                if (start_option == 0)
+                    break;
+                else if (start_option == 1) {
+                    vector<Graph::Edge> edges = parse_file("example_graph.txt");
+                    list_graph = new AdjacencyList(edges.size(), false);
+                    matrix_graph = new IncidenceMatrix(edges.size(), false);
+                    for (Graph::Edge edge : edges) {
+                        list_graph->addEdge(edge.vertex, edge.neighbor, edge.weight);
+                        matrix_graph->addEdge(edge.vertex, edge.neighbor, edge.weight);
+                    }
+                } else if (start_option == 2) {
+                    int size, density;
+                    cout << "Enter vertices:\n";
+                    cin >> size;
+                    cout << "Enter density (1-100)%:\n";
+                    cin >> density;
+                    list_graph = new AdjacencyList(size, false);
+                    matrix_graph = new IncidenceMatrix(size, false);
+                    matrix_graph->fillWithRandomEdges(density / 100.0);
+                    for (Graph::Edge edge : matrix_graph->getAllEdges())
+                        list_graph->addEdge(edge.vertex, edge.neighbor, edge.weight);
+
+                } else if (start_option == 3) {
+                    if (!list_graph) {
+                        cout << "No graph\n";
+                        continue;
+                    }
+                    list_graph->print();
+                    matrix_graph->print();
+                    continue;
+                } else if (start_option == 4) {
+                    if (!list_graph) {
+                        cout << "No graph\n";
+                        continue;
+                    }
+                    auto kruskal = Kruskal(matrix_graph);
+                    vector<Graph::Edge> mst = kruskal.getMST();
+                    for (Graph::Edge edge : mst) {
+                        edge.print();
+                    }
+                } else if (start_option == 5) {
+                    if (!list_graph) {
+                        cout << "No graph\n";
+                        continue;
+                    }
+                    auto kruskal = Kruskal(list_graph);
+                    vector<Graph::Edge> mst = kruskal.getMST();
+                    for (Graph::Edge edge : mst) {
+                        edge.print();
+                    }
+                }
+            } while (true);
+        } else if (start_option == 2) {  // TODO: remove duplicated code
+            do {
+                cout << "=========================\n"
+                        "1 - Load graph from file\n"
+                        "2 - Generate random graph\n"
+                        "3 - Display graph\n"
+                        "4 - Run Dijkstra on Incidence Matrix\n"
+                        "5 - Run Dijkstra on Adjacency List\n"
+                        "0 - Exit\n"
+                        "=========================" << endl;
+                cin >> start_option;
+                if (start_option == 0)
+                    break;
+                else if (start_option == 1) {
+                    vector<Graph::Edge> edges = parse_file("example_graph.txt");
+                    list_graph = new AdjacencyList(edges.size(), true);
+                    matrix_graph = new IncidenceMatrix(edges.size(), true);
+                    for (Graph::Edge edge : edges) {
+                        list_graph->addEdge(edge.vertex, edge.neighbor, edge.weight);
+                        matrix_graph->addEdge(edge.vertex, edge.neighbor, edge.weight);
+                    }
+                } else if (start_option == 2) {
+                    int size, density;
+                    cout << "Enter vertices:\n";
+                    cin >> size;
+                    cout << "Enter density (1-100)%:\n";
+                    cin >> density;
+                    list_graph = new AdjacencyList(size, false);
+                    matrix_graph = new IncidenceMatrix(size, false);
+                    matrix_graph->fillWithRandomEdges(density / 100.0);
+                    for (Graph::Edge edge : matrix_graph->getAllEdges())
+                        list_graph->addEdge(edge.vertex, edge.neighbor, edge.weight);
+
+                } else if (start_option == 3) {
+                    if (list_graph == nullptr) {
+                        cout << "No graph\n";
+                        continue;
+                    }
+                    list_graph->print();
+                    matrix_graph->print();
+                    continue;
+                } else if (start_option == 4) {
+                    if (list_graph == nullptr) {
+                        cout << "No graph\n";
+                        continue;
+                    }
+                    int start;
+                    cout << "Enter start vertex:\n";
+                    cin >> start;
+                    auto dijkstra = Dijkstra(matrix_graph);
+                    vector<int> weights = dijkstra.findShortestPaths(start);
+                    for (int i = 0; i < matrix_graph->getSize(); i++) {
+                        if (weights[i] != 2147483647)
+                            cout << "Path from " << start << " to " << i << " takes " << weights[i] << endl;
+                        else
+                            cout << "Path from " << start << " to " << i << " doesn't exist" << endl;
+                    }
+                } else if (start_option == 5) {
+                    if (list_graph == nullptr) {
+                        cout << "No graph\n";
+                        continue;
+                    }
+                    int start;
+                    cout << "Enter start vertex:\n";
+                    cin >> start;
+                    auto dijkstra = Dijkstra(list_graph);
+                    vector<int> weights = dijkstra.findShortestPaths(start);
+                    for (int i = 0; i < list_graph->getSize(); i++) {
+                        if (weights[i] != 2147483647)
+                            cout << "Path from " << start << " to " << i << " takes " << weights[i] << endl;
+                        else
+                            cout << "Path from " << start << " to " << i << " doesn't exist" << endl;
+                    }
+                }
+            } while (true);
         }
-//        if (start_option == 1 or start_option == 2) {
-//            switch (start_option) {
-//                case 1: {
-//                    file_name = "array.txt";
-//                    pair<int *, int> input_data = parse_file(file_name, base_array);
-//                    structure = new DynamicArray(input_data.first, input_data.second);
-//                    break;
-//                }
-//                case 2: {
-//                    file_name = "list.txt";
-//                    pair<int *, int> input_data = parse_file(file_name, base_array);
-//                    structure = new List(input_data.first, input_data.second);
-//                    break;
-//                }
-//                default:
-//                    continue;
-//            }
-//            cout << "Read data structure from file: ";
-//            structure->print();
-//            int action;
-//            do {
-//                cout << "Available actions: insert (1), remove (2), search (3). Enter 0 to exit:" << endl;
-//                cin >> action;
-//                if (action == 0)
-//                    break;
-//                int index;
-//                try {
-//                    switch (action) {
-//                        case 1:
-//                            cout << "Choose index (enter -1 to access the last element):" << endl;
-//                            cin >> index;
-//                            int value;
-//                            cout << "Enter value:" << endl;
-//                            cin >> value;
-//                            if (index == -1)
-//                                structure->addLast(value);
-//                            else
-//                                structure->insert(value, index);
-//                            break;
-//                        case 2:
-//                            cout << "Choose index (enter -1 to access the last element):" << endl;
-//                            cin >> index;
-//                            if (structure->getSize() == 0){
-//                                cout << "Cannot remove value from an empty list/array." << endl;
-//                                break;
-//                            }
-//                            if (index == -1)
-//                                structure->removeLast();
-//                            else
-//                                structure->removeOnIndex(index);
-//                            break;
-//                        case 3: {
-//                            int value;
-//                            cout << "Enter value:" << endl;
-//                            cin >> value;
-//                            int search_index = structure->search(value);
-//                            if (search_index == -1)
-//                                cout << "Value not found" << endl;
-//                            else
-//                                cout << "Found value on index " << search_index << endl;
-//                            break;
-//                        }
-//                        default:
-//                            continue;
-//                    }
-//                } catch (IndexError &e) {
-//                    cout << "Index " << index << " out of range" << endl;
-//                }
-//                structure->print();
-//            } while (true);
-//        } else if (start_option == 3) {
-//            int action;
-//            file_name = "heap.txt";
-//            pair<int *, int> input_data = parse_file(file_name, base_array);
-//            auto *array = new DynamicArray(input_data.first, input_data.second);
-//            auto *heap = new Heap(array);
-//            cout << "Read heap structure from file:" << endl;
-//            heap->print();
-//            do {
-//                try {
-//                    cout << "Available actions: insert (1), extract (2), search (3). Enter 0 to exit:" << endl;
-//                    cin >> action;
-//                    if (action == 0)
-//                        break;
-//                    else if (action == 1) {
-//                        int value;
-//                        cout << "Enter value:" << endl;
-//                        cin >> value;
-//                        heap->insert(value);
-//                    } else if (action == 2) {
-//                        int value = heap->extract();
-//                        cout << "Extracted " << value << endl;
-//                    } else if (action == 3) {
-//                        int value;
-//                        cout << "Enter value:" << endl;
-//                        cin >> value;
-//                        int found = heap->search(value);
-//                        if(found)
-//                            cout << "Value " << value << " found" << endl;
-//                        else
-//                            cout << "Value " << value << " NOT found" << endl;
-//                    }
-//                    heap->print();
-//                } catch (IndexError &e) {
-//                    cout << "Cannot extract value from an empty heap" << endl;
-//                }
-//            } while (true);
-//        }
     } while (true);
 }
 
