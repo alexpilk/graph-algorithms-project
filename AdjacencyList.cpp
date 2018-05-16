@@ -21,6 +21,7 @@ void AdjacencyList::addEdge(int v1, int v2, int weight) {
 }
 
 void AdjacencyList::print() {
+    cout << "Adjacency list" << endl;
     for (int vertex = 0; vertex < list.size(); vertex++) {
         cout << vertex;
         for (auto edge : list[vertex])
