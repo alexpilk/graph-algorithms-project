@@ -13,7 +13,7 @@ using namespace std;
 
 class Graph {
 protected:
-    unsigned int size;
+    int size;
     bool directed;
 public:
     struct Edge {

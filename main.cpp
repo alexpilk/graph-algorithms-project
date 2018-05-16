@@ -3,66 +3,24 @@
 #include "IncidenceMatrix.h"
 #include "Kruskal.h"
 #include "Dijkstra.h"
-#include <vector>
-#include <iostream>
 #include <fstream>
 #include <sstream>
 
 
 using namespace std;
 
-//void test_graph(Graph *graph) {
-//    graph->fillWithRandomEdges(0.5);
-//    cout << "Graph:" << endl;
-//    graph->print();
-//    vector<int> distances = Dijkstra(graph).findShortestPaths(0);
-//    cout << "Dijkstra:" << endl;
-//    for(int distance : distances){
-//        cout << distance << endl;
-//    }
-//    cout << "Kruskal:" << endl;
-//    vector<Graph::Edge> mst = Kruskal(graph).getMST();
-//    for(Graph::Edge edge : mst) {
-//        edge.print();
-//    }
-//}
-
-//void measure_graph(ofstream* output, unsigned int vertices, double density) {
-//    *output << ",";
-//    auto matrix_graph = IncidenceMatrix(vertices, true);
-//    matrix_graph.fillWithRandomEdges(density);
-//    auto dijkstra = Dijkstra(&matrix_graph);
-//    *output << measure(dijkstra, dijkstra.findShortestPaths, 1);
-//
-//    *output << ",";
-//    matrix_graph = IncidenceMatrix(vertices, false);
-//    matrix_graph.fillWithRandomEdges(density);
-//    auto kruskal = Kruskal(&matrix_graph);
-//    *output << measure(kruskal, kruskal.getMST);
-//
-//    *output << ",";
-//    auto list_graph = AdjacencyList(vertices, true);
-//    list_graph.fillWithRandomEdges(density);
-//    dijkstra = Dijkstra(&list_graph);
-//    *output << measure(dijkstra, dijkstra.findShortestPaths, 1);
-//
-//    *output << ",";
-//    list_graph = AdjacencyList(vertices, false);
-//    list_graph.fillWithRandomEdges(density);
-//    kruskal = Kruskal(&list_graph);
-//    *output << measure(kruskal, kruskal.getMST);
-//}
-vector<Graph::Edge> parse_file(const string path) {
+pair<int, vector<Graph::Edge>> parse_file(const string path) {
     vector<Graph::Edge> edges;
     ifstream infile(path);
-    string first_line;
-    infile >> first_line;
-    getline(infile, first_line);
     string line;
+    getline(infile, line, ' ');
+    int number_of_edges = stoi(line);
+    getline(infile, line, ' ');
+    int size = stoi(line);
     int v1, v2, weight;
     while (getline(infile, line)) {
 
-        istringstream iss(line); // Turn the string into a stream.
+        istringstream iss(line);
         string tmp;
 
         getline(iss, tmp, ' ');
@@ -73,13 +31,13 @@ vector<Graph::Edge> parse_file(const string path) {
         weight = stoi(tmp);
         edges.emplace_back(Graph::Edge(v1, v2, weight));
     }
-    return edges;
+    return make_pair(size, edges);
 }
 
 void menu() {
     int start_option;
-    AdjacencyList *list_graph = NULL;
-    IncidenceMatrix *matrix_graph = NULL;
+    AdjacencyList *list_graph = nullptr;
+    IncidenceMatrix *matrix_graph = nullptr;
     do {
         cout << "=========================\n"
                 "1 - MST\n"
@@ -103,9 +61,11 @@ void menu() {
                 if (start_option == 0)
                     break;
                 else if (start_option == 1) {
-                    vector<Graph::Edge> edges = parse_file("example_graph.txt");
-                    list_graph = new AdjacencyList(edges.size(), false);
-                    matrix_graph = new IncidenceMatrix(edges.size(), false);
+                    auto parsed = parse_file("example_graph.txt");
+                    int size = parsed.first;
+                    vector<Graph::Edge> edges = parsed.second;
+                    list_graph = new AdjacencyList(size, false);
+                    matrix_graph = new IncidenceMatrix(size, false);
                     for (Graph::Edge edge : edges) {
                         list_graph->addEdge(edge.vertex, edge.neighbor, edge.weight);
                         matrix_graph->addEdge(edge.vertex, edge.neighbor, edge.weight);
@@ -166,9 +126,11 @@ void menu() {
                 if (start_option == 0)
                     break;
                 else if (start_option == 1) {
-                    vector<Graph::Edge> edges = parse_file("example_graph.txt");
-                    list_graph = new AdjacencyList(edges.size(), true);
-                    matrix_graph = new IncidenceMatrix(edges.size(), true);
+                    auto parsed = parse_file("example_graph.txt");
+                    int size = parsed.first;
+                    vector<Graph::Edge> edges = parsed.second;
+                    list_graph = new AdjacencyList(size, true);
+                    matrix_graph = new IncidenceMatrix(size, true);
                     for (Graph::Edge edge : edges) {
                         list_graph->addEdge(edge.vertex, edge.neighbor, edge.weight);
                         matrix_graph->addEdge(edge.vertex, edge.neighbor, edge.weight);
@@ -194,7 +156,7 @@ void menu() {
                     matrix_graph->print();
                     continue;
                 } else if (start_option == 4) {
-                    if (list_graph == nullptr) {
+                    if (matrix_graph == nullptr) {
                         cout << "No graph\n";
                         continue;
                     }
@@ -202,12 +164,10 @@ void menu() {
                     cout << "Enter start vertex:\n";
                     cin >> start;
                     auto dijkstra = Dijkstra(matrix_graph);
-                    vector<int> weights = dijkstra.findShortestPaths(start);
-                    for (int i = 0; i < matrix_graph->getSize(); i++) {
-                        if (weights[i] != 2147483647)
-                            cout << "Path from " << start << " to " << i << " takes " << weights[i] << endl;
-                        else
-                            cout << "Path from " << start << " to " << i << " doesn't exist" << endl;
+                    auto paths = dijkstra.findShortestPaths(start);
+                    for (int i = 0; i < paths.size(); i++) {
+                        cout << "Path from " << start << " to " << i << " has ";
+                        paths[i].print();
                     }
                 } else if (start_option == 5) {
                     if (list_graph == nullptr) {
@@ -218,12 +178,10 @@ void menu() {
                     cout << "Enter start vertex:\n";
                     cin >> start;
                     auto dijkstra = Dijkstra(list_graph);
-                    vector<int> weights = dijkstra.findShortestPaths(start);
-                    for (int i = 0; i < list_graph->getSize(); i++) {
-                        if (weights[i] != 2147483647)
-                            cout << "Path from " << start << " to " << i << " takes " << weights[i] << endl;
-                        else
-                            cout << "Path from " << start << " to " << i << " doesn't exist" << endl;
+                    auto paths = dijkstra.findShortestPaths(start);
+                    for (int i = 0; i < paths.size(); i++) {
+                        cout << "Path from " << start << " to " << i << " has ";
+                        paths[i].print();
                     }
                 }
             } while (true);

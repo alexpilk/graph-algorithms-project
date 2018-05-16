@@ -8,7 +8,7 @@
 using namespace std;
 
 
-IncidenceMatrix::IncidenceMatrix(unsigned int size, bool directed) {
+IncidenceMatrix::IncidenceMatrix(int size, bool directed) {
     this->directed = directed;
     this->size = size;
 }

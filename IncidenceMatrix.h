@@ -19,7 +19,7 @@ private:
     vector<int> createEdge(int v1, int v2);
 
 public:
-    explicit IncidenceMatrix(unsigned int size, bool directed);
+    explicit IncidenceMatrix(int size, bool directed);
 
     void addEdge(int v1, int v2, int weight) override;
 

@@ -14,7 +14,7 @@ class AdjacencyList : public Graph {
 private:
     vector<vector<Edge>> list;
 public:
-    explicit AdjacencyList(unsigned int size, bool directed);
+    explicit AdjacencyList(int size, bool directed);
 
     void deleteRandomEdge() override;
 

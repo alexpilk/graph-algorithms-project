@@ -8,7 +8,7 @@
 using namespace std;
 
 
-AdjacencyList::AdjacencyList(unsigned int size, bool directed) {
+AdjacencyList::AdjacencyList(int size, bool directed) {
     this->size = size;
     this->directed = directed;
     list.resize(size);
