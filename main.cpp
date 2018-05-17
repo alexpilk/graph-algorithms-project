@@ -15,14 +15,12 @@ pair<int, vector<Graph::Edge>> parse_file(const string path) {
     string line;
     getline(infile, line, ' ');
     int number_of_edges = stoi(line);
-    getline(infile, line, ' ');
+    getline(infile, line);
     int size = stoi(line);
     int v1, v2, weight;
     while (getline(infile, line)) {
-
         istringstream iss(line);
         string tmp;
-
         getline(iss, tmp, ' ');
         v1 = stoi(tmp);
         getline(iss, tmp, ' ');
